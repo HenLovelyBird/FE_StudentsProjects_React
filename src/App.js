@@ -1,17 +1,32 @@
-import React from 'react';
+import React, { Component } from 'react';
 import './App.css';
-import {Container, Row, Col} from "reactstrap"
+import StudentsList from './Components/StudentsList';
+import StudentDetail from './Components/StudentDetails';
+import ProjectsDetail from './Components/ProjectsDetails';
+import {Container} from "reactstrap"
+import { Route, Link } from "react-router-dom";
 
-function App() {
-  return (
-   <Container>
-     <Row>
-       <Col><h3><b>Students</b></h3></Col>
-
-       <Col><h3><b>Projects</b></h3></Col>
-     </Row>
-   </Container>
-  );
+class App extends React.Component {
+  render(){
+return (
+ <Container> 
+    <div className="row">
+      <div className="col-sm-12 text-center background-div">
+        <Link to="/">
+          <h1>Students and their Fabulous Projects</h1>
+        </Link>
+      </div>
+      <ProjectsDetail />
+    </div>
+    <hr />
+    <div className="container">
+      <Route path="/students" exact component={StudentsList} />
+      <Route path="/students/:id" exact component={StudentDetail} />
+    </div>
+</Container>
+    );
+  }
 }
+
 
 export default App;
