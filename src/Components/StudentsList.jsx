@@ -1,67 +1,68 @@
-import React, { Component } from "react";
-import { Container, Row, Col } from "reactstrap";
-import StudentDetails from './StudentDetails';
+import React, { Component } from 'react';
+import { Container, Row, Col, Button } from "reactstrap";
+// import StudentDetails from './StudentDetails';
 import { PongSpinner} from 'react-spinners-kit';
+import { connect } from 'react-redux'
 
 const mapStateToProps = state => state;
-
 const mapDispatchToProps = dispatch => ({
   studentSelected: id =>
     dispatch({
-      type: "LOAD_SPINNER",
+      type: "SELECT_A_STUDENT",
       payload: id
-    })
+    }),
+
+    setLoading: () => dispatch({ type: "LOAD_SPINNER"}),
+    isFetching: () => dispatch({type: "FETCH_INFO"})
 });
 
 class StudentsList extends React.Component {
-  studentSelected = id => this.setState({studentSelected: id});
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.studentSelected !== this.props.studentSelected) {
-      this.setState({
-        student: this.props.students.find(student => student.id === this.props.studentSelected)
-      });
-    }
-
-    componentDidMount = async () => {
-        // DISPATCH LOAD_SPINNER
-          let res = await fetch ("http://localhost:3003/students/", {
-            method: "GET",
-          });
-            let students = await res.json();
-            console.log(students);
-            this.setState({
-            students: students
-          });
-        // DISPATCH LOAD_SPINNER
-  }
-
-
+    // state = { }
   render() {
-    return this.state.errors ? (
+    return (
       <Container>
         <Row>
           <Col>
-            <h3>List of Students And Their Fabulous Projects </h3>
+            <h3>A List of Students And Their Fabulous Projects </h3>
           </Col>
         </Row>
 
-        <Row>
-            {this.props.isFetching.loading ? 
-            <PongSpinner /> : this.props.student && this.props.student.map(=>
-                <Col>{this.props.student.name}</Col>
-                <Col>{this.props.student.projects}</Col>)
-                });
-        </Row>
+        {this.props.isloading && <PongSpinner /> }
 
         <Row>
-          <StudentDetails
-            studentSelected={this.state.students.studentSelected}
-            projects={this.state.students.projects}
-          />
+          <Col>
+            {this.props.students && this.props.students.map(student=>
+                <><div>{this.props.student.name}</div>
+                <div>{this.props.student.projects}</div>
+                </>)};
+          </Col>
+          <Col>
+            <Button onClick={(e)=> this.props.studentSelected(e.target.value)} 
+            studentSelected={this.state.students.studentSelected}>Select</Button>
+          </Col>
         </Row>
+
       </Container>
-    )};
-}
+      )
+    }
+
+    componentDidMount = async () => {
+      this.props.setLoading();
+      setTimeout(() =>{
+        this.props.setFetching();
+      }, 3000)
+      let res = await fetch ("https://be-studentsprojects-mongodb.herokuapp.com/students", {
+        method: "GET",
+        });
+          let students = await res.json();
+          console.log(students);
+          this.setState({
+          students: students
+          });
+       this.props.setFetching()
+      }
+
+  }
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudentsList);

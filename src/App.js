@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import StudentsList from './Components/StudentsList';
 import StudentDetail from './Components/StudentDetails';
-import ProjectsDetail from './Components/ProjectsDetails';
+// import ProjectsDetail from './Components/ProjectsDetails';
 import {Container} from "reactstrap"
 import { Route, Link } from "react-router-dom";
 
@@ -16,7 +16,7 @@ return (
           <h1>Students and their Fabulous Projects</h1>
         </Link>
       </div>
-      <ProjectsDetail />
+      <StudentsList />
     </div>
     <hr />
     <div className="container">

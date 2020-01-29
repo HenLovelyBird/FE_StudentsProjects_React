@@ -2,14 +2,13 @@ import { createStore } from "redux";
 import myReducer from "../reducers";
 
 const initialState = {
-  isFetching: {
-    students: {},
-    loading: false,
-    errors: ""
-  }
+  students: {},
+  isloading: false,
+  errors: null
 };
-//false loading will set a spinner
-//if state of errors is null, update the state to fetched infos
+//if students array, then update the state with array
+//isloading !false returns a spinner with a timeout otherwise isloading loads the fetched info
+//if state of errors is null, update the state to fetched infos otherwise show errors
 export default function configureStore() {
   return createStore(
     myReducer,
