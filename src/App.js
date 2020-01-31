@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './App.css';
 import StudentsList from './Components/StudentsList';
-import StudentDetail from './Components/StudentDetails';
+import StudentDetail from './Components/StudentsDetails';
 // import ProjectsDetail from './Components/ProjectsDetails';
 import {Container} from "reactstrap"
 import { Route, Link } from "react-router-dom";
@@ -21,7 +21,7 @@ return (
     <hr />
     <div className="container">
       <Route path="/students" exact component={StudentsList} />
-      <Route path="/students/:id" exact component={StudentDetail} />
+      {/* <Route path="/students/:id" exact component={StudentDetail} /> */}
     </div>
 </Container>
     );

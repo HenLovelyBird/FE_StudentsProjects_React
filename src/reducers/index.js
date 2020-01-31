@@ -3,22 +3,28 @@ export default function(state = {}, action) {
       case "SELECT_A_STUDENT": {
         return {
           ...state,
-        studentSelected: {
+        studentselected: {
           ...state.student,
           id: action.payload
         }
         }
       };
+      case "LOAD_STUDENTS": {
+        return {
+          ...state,
+          students: action.payload
+        }
+      };
       case "LOAD_SPINNER": {
         return {
           ...state,
-          isloading: true
+          isLoading: true
         }
       };
-      case "FETCH_INFO": {
+      case "UNLOAD_SPINNER": {
         return {
           ...state,
-          isloading: false
+          isLoading: false
         }
       };
       case "ERRORS": {

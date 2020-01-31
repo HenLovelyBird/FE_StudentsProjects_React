@@ -2,8 +2,8 @@ import { createStore } from "redux";
 import myReducer from "../reducers";
 
 const initialState = {
-  students: {},
-  isloading: false,
+  students: [],
+  isLoading: false,
   errors: null
 };
 //if students array, then update the state with array

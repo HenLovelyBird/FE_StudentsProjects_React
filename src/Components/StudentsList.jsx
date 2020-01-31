@@ -1,19 +1,24 @@
 import React, { Component } from 'react';
 import { Container, Row, Col, Button } from "reactstrap";
-// import StudentDetails from './StudentDetails';
 import { PongSpinner} from 'react-spinners-kit';
 import { connect } from 'react-redux'
+// import StudentsDetails from './StudentsDetails';
+
 
 const mapStateToProps = state => state;
 const mapDispatchToProps = dispatch => ({
-  studentSelected: id =>
+  studentselected: id =>
     dispatch({
       type: "SELECT_A_STUDENT",
       payload: id
     }),
 
-    setLoading: () => dispatch({ type: "LOAD_SPINNER"}),
-    isFetching: () => dispatch({type: "FETCH_INFO"})
+    saveStudents: (data) => dispatch({ type:"LOAD_STUDENTS", payload: data}),
+
+    isloading: () => dispatch({ type: "LOAD_SPINNER"}),
+
+    isnotloading: () => dispatch({type: "UNLOAD_SPINNER"})
+    //function name should not match the state name (otherwise it gets confused)
 });
 
 class StudentsList extends React.Component {
@@ -21,45 +26,51 @@ class StudentsList extends React.Component {
   render() {
     return (
       <Container>
-        <Row>
+
+        <Row style={{Align: "center"}}>
           <Col>
-            <h3>A List of Students And Their Fabulous Projects </h3>
+          {this.props.isLoading &&  <>
+          <PongSpinner id="spinner"/>
+          <Row> <div>One Moment, Please...</div></Row></>}
           </Col>
         </Row>
-
-        {this.props.isloading && <PongSpinner /> }
-
-        <Row>
-          <Col>
+        
             {this.props.students && this.props.students.map(student=>
-                <><div>{this.props.student.name}</div>
-                <div>{this.props.student.projects}</div>
-                </>)};
-          </Col>
-          <Col>
-            <Button onClick={(e)=> this.props.studentSelected(e.target.value)} 
-            studentSelected={this.state.students.studentSelected}>Select</Button>
-          </Col>
-        </Row>
+                <><Row>
+                  <Col>
+                <img src="https://picsum.photos/200" style={{maxwidth: "50%"}}/>
+                <div>{student.name}</div>
+                <div>{student.surname}</div>
+                <div>{student.email}</div>
+                <div>{student.projects}</div>
+                <Button style={{marginBottom: "2em"}}color="success" onClick={
+                  (e)=> this.props.studentselected(student._id)
+                }>Select</Button>
+                </Col>
+                {/* <Col><StudentsDetails /></Col> */}
+                </Row>
+                </>)} 
 
       </Container>
       )
     }
 
     componentDidMount = async () => {
-      this.props.setLoading();
+      this.props.isloading();
       setTimeout(() =>{
-        this.props.setFetching();
-      }, 3000)
+        this.props.isnotloading();
+        }, 3000)
+
       let res = await fetch ("https://be-studentsprojects-mongodb.herokuapp.com/students", {
         method: "GET",
         });
           let students = await res.json();
-          console.log(students);
-          this.setState({
-          students: students
-          });
-       this.props.setFetching()
+          this.props.saveStudents(students)
+          // console.log(students);
+          // this.setState({
+          // students: students
+          // });
+         
       }
 
   }
